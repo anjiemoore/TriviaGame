@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>Star Wars Trivia Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!--Link to Bootstrap-->
@@ -20,8 +20,9 @@
 <body>
 
 
-<div class="row text-center">
+<div class="row text-center mx-0">
     <div class="col">
+        <h1 id="header">STAR WARS TRIVIA GAME!</h1>
         <button id="start" type="button" class="btn btn-dark">Lightspeed, Chewie!</button>
     </div>
 </div> 
@@ -36,7 +37,7 @@
             <br>
             <div class="row">
                 <div class="col">
-                    <h2 span id="timer"></h2>
+                    <h4 span id="timer"></h4>
                 </div>
             </div>
             <div class="row">
@@ -63,14 +64,52 @@
             <h3 id="response" class="col"></h3>
         </div>
         <div class="row text-center">
-            <p><img id="responseImage" src=""></p>
+            <div class="col-md-12">
+                <p><img id="responseImage" src="" width="800px"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <p id="correctResponse"></p>
+            </div>
+        </div>
+    </div>
+    <div id="outOfTimeCard" class="card text-center">
+        <div class="row">
+            <h3 id="outOfTimeResponse" class="col"></h3>
         </div>
         <div class="row text-center">
-            <p id="correctResponse"></p>
+            <div class="col-md-12">
+                <p><img id="outOfTimeImage" src="" width="800px"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <p id="outOfTimeCorrectResponse"></p>
+            </div>
+        </div>
+    </div>
+     <div id="endingCard" class="card text-center">
+        <div class="row">
+            <h3 id="endingResponse" class="col"></h3>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-12">
+                <p><img id="endingImage" src="" width="800px"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p id="endingResultCorrect"></p>
+                <p id="endingResultIncorrect"></p>
+            </div>
         </div>
     </div>
 </div>
 
+<audio autoplay>
+    <source src="../TriviaGame/assets/sounds/Star Wars Main Theme (Full).mp3">
+</audio>
 <!--JavaScript link-->
 <script src="../TriviaGame/assets/javascript/app.js"></script>
 <!--Bootstrap JavaScript Links -->

@@ -82,72 +82,104 @@ var questions = [
     }
 ];
 
-var timer = 31;
+var wins = 0;
+var losses = 0;
 var intervalId;
 
+
 $(".container").hide();
+$("#outOfTimeCard").hide();
 $("#start").click(beginQuiz);
 
-function beginTimer () {
-    if (intervalId !== 0) {
-        clearInterval(intervalId);
-        timer = 31;
-    };
-
-    decrement();
-    intervalId = setInterval(decrement, 1000);
-}
-
-function decrement() {
-    timer--;
-    $("#timer").html("<h2>" + timer + "</h2>");
-        if (timer === 0) {
-            clearInterval(intervalId);
-        }
-}
-
 function setUpQuestion(question) {
-    beginTimer();
-    $("#questionCard").show();
-    $("#answerCard").hide();
+    var beginTimer = function() {
+        if (intervalId !== 0) {
+            clearInterval(intervalId);
+            timer = 30;
+        };
 
-    $("#question").text(question.q);
-    $("#A").text(question.a1);
-    $("#B").text(question.a2);
-    $("#C").text(question.a3);
-    $("#D").text(question.a4);
-
+        decrement();
+        intervalId = setInterval(decrement, 1000);
+    }
+    var decrement = function() {
+        $("#timer").html("<h4>You have " + timer + " seconds left!</h4>");
+            if (timer === 0 && !$("#answerCard").is(":visible") && !$("#endingCard").is(":visible")) {
+                clearInterval(intervalId);
+                outOfTime();
+            } else {                
+                timer--;
+            }
+    }
     var correctClick = function() {
+        wins++;
         $("#questionCard").hide();
         $("#answerCard").show();
         $("#correctResponse").hide();
 
-        $("#response").text("You're a fucking nerd!");
+        $("#response").text("Correct!");
         $("#responseImage").attr("src", "assets/images/right.gif");
 
         setTimeout(function(){
            setUpQuestion(nextQuestion()) 
         }, 3000);
     }
-
     var wrongClick = function() {
+        losses++;
         $("#questionCard").hide();
         $("#answerCard").show();
         $("#correctResponse").show();
 
-        $("#response").text("You're a fucking loser, go kill yourself!");
-        $("#correctResponse").text("The correct answer was " + question[question.ca] + " !");
-        $("#responseImage").attr("src", "assets/images/wrong.png");
+        $("#response").text("Wrong!");
+        $("#correctResponse").text("The correct answer was " + question[question.ca] + "!");
+        $("#responseImage").attr("src", "assets/images/wrong.gif");
+
+        setTimeout(function(){
+            setUpQuestion(nextQuestion()) 
+         }, 3000);
+    }
+    var outOfTime = function() {
+        losses++;
+        $("#questionCard").hide();
+        $("#answerCard").hide();
+        $("#outOfTimeCard").show();
+        $("#correctResponse").show();
+
+        $("#outOfTimeResponse").text("Not quick enough!");
+        $("#outOfTimeCorrectResponse").text("The correct answer was " + question[question.ca] + " !");
+        $("#outOfTimeImage").attr("src", "assets/images/outOfTime.gif");
 
         setTimeout(function(){
             setUpQuestion(nextQuestion()) 
          }, 3000);
     }
 
-    $("#A").unbind("click");
-    $("#B").unbind("click");
-    $("#C").unbind("click");
-    $("#D").unbind("click");  
+    if (question === undefined) {
+        $("#questionCard").hide();
+        $("#answerCard").hide();
+        $("#outOfTimeCard").hide();
+        $("#endingCard").show();
+
+        $("#endingResponse").text(wins > losses ? "The Force is with you!" : "Need a little bit more work, young Padawan");
+        $("#endingImage").attr("src", wins > losses ?  "assets/images/win.gif" : "assets/images/lose.gif");
+        $("#endingResultCorrect").text("Correct: " + wins);
+        $("#endingResultIncorrect").text("Incorrect: " + losses);
+    } else {
+        beginTimer();
+        $("#questionCard").show();
+        $("#answerCard").hide();
+        $("#outOfTimeCard").hide();
+        $("#endingCard").hide();
+
+        $("#question").text(question.q);
+        $("#A").text(question.a1);
+        $("#B").text(question.a2);
+        $("#C").text(question.a3);
+        $("#D").text(question.a4);
+
+        $("#A").unbind("click");
+        $("#B").unbind("click");
+        $("#C").unbind("click");
+        $("#D").unbind("click");  
 
         if (question.ca === "a1") {
             $("#A").click(correctClick);
@@ -160,7 +192,7 @@ function setUpQuestion(question) {
         } else {
             $("#B").click(wrongClick);
         }
-
+        
         if (question.ca === "a3") {
             $("#C").click(correctClick);
         } else {
@@ -172,18 +204,17 @@ function setUpQuestion(question) {
         } else {
             $("#D").click(wrongClick);
         }
+    }
 }
 
 function nextQuestion() {
     return questions.shift();
 }
-
 function beginQuiz() {
-
     $("#start").hide();
+    $("#header").hide();
     $(".container").show();
-
+    $("#outOfTimeCard").hide();
     setUpQuestion(nextQuestion());
-
 }
 
